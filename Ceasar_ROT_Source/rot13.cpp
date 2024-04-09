@@ -1,64 +1,41 @@
-#include <iostream>
-#include <sstream>
+#include<bits/stdc++.h>
 using namespace std;
 
-class ROT{
-    private:
-        string s;
-        const int shift = 13;
-    
-    public:
-        ROT(){};
-        ROT(string s){
-            this->s = s;
+string encrypt(string text, int s)
+{
+    string result = "";
+ 
+    for (int i = 0; i < text.length(); i++) {
+        if (text[i] == ' ') {
+            result += ' ';
+            continue;
         }
+        if (isupper(text[i]))
+            result += char(int(text[i] + s - 65) % 26 + 65);
+ 
+        else
+            result += char(int(text[i] + s - 97) % 26 + 97);
+    }
+ 
+    return result;
+}
 
-        friend istream& operator>>(istream& in, ROT& input){
-            cout << "Please input your string: ";
-            getline(in, input.s);
-            return in;
-        }
+string decrypt(string text, int s)
+{
+    return encrypt(text, 26 - s);
+}
 
-        void encode(){
-            string result = "";
-            for (size_t i = 0; i < this->s.length(); i++) {
-                if (isupper(this->s[i]))
-                    result += (this->s[i] + this->shift - 'A') % 26 + 'A';
-                else if (islower(this->s[i]))
-                    result += (this->s[i] + this->shift - 'a') % 26 + 'a';
-                else    
-                    result += this->s[i];
-            }
-            this->s = result;
-        }
+int main()
+{	
+	string message;
+    cout << "Encoded Text : "; getline(cin, message);
+	int shift = 13;
+	
+	cout << encrypt(message, shift) << "\n";
 
-        void decode(){
-            string result = "";
-            for (size_t i = 0; i < this->s.length(); i++) {
-                if (isupper(this->s[i]))
-                    result += (this->s[i] - this->shift - 'A' + 26) % 26 + 'A';
-                else if (islower(this->s[i]))
-                    result += (this->s[i] - this->shift - 'a' + 26) % 26 + 'a';
-                else    
-                    result += this->s[i];
-            }
-            this->s = result;
-        }
-
-        friend ostream& operator<<(ostream& out, ROT& output){
-            out << "Here is your output: ";
-            out << output.s;
-            return out;
-        }
-
-};
-
-
-int main(){
-    ROT text;
-    cin >> text;
-    text.encode();
-    cout << text << endl;
-    text.decode();
-    cout << text << endl;
+    cout << "Decoded Text : "; getline(cin, message);
+	
+	cout << decrypt(message, shift) << "\n";
+	
+	return 0;
 }
